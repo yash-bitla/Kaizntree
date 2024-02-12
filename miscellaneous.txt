@@ -19,3 +19,7 @@ qwerty
 
 yashbitla
 qwerty
+
+activate venv - Scripts\activate.bat
+
+python manage.py runserver
