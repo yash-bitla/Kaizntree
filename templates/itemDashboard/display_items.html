@@ -1,0 +1,78 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/dashboard.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <title>Display Items</title>
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">            
+            <!-- 20% column -->
+            <div class="col-sm-2 h-100" style="background-color: #f0f0f0;">
+                <nav class="navbar align-center">
+                    <a class="navbar-brand align-center" href="#">
+                        <img src="{% static '/images/kaizntree_logo.jpg' %}" width="40" height="40" class="" alt="Kaizntree Logo">
+                      Kaizntree
+                    </a>
+                </nav>
+
+                <h4 class="text-center" id="title"> Welcome, {{fname}}</h4>
+
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link " id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
+                    <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Items</a>
+                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Stock</a>
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Build</a>
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Customers</a>
+                </div>
+            </div>
+      
+            <!-- 80% column -->
+            <div class="col-sm-10 h-100">
+                <div class="heading">
+                    <h3>
+                        Item Dashboard                        
+                    </h3>
+                    <small class="text-muted">All items</small>
+
+                    <button class="cat-btn" id="cat-btn" onclick="create_category()">Create Category</button>
+                    <button class="item-btn" id="item-btn" onclick="create_item()">Create Item</button>
+                </div>                
+            </div>
+        </div>
+    </div>
+
+    <!-- <h1>Items Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>SKU</th>
+                <!-- Add more columns based on your Item model fields -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.category.name }}</td>
+                    <td>{{ item.sku }}</td>
+                    <!-- Add more columns based on your Item model fields -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> -->
+</body>
+</html>

@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+:root {
+    --second-color: hsl(var(--hue-color), 56%, 12%);
+    --header-height: 3rem;
+    --body-font: 'Poppins', sans-serif;
+    --normal-font-size: .938rem;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+    color: var(--second-color);   
+}
+
+.nav-pills .nav-link {
+    color: black; /* Set text color to black */
+    background-color: #f0f0f0; /* Set background color to light gray */
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    color: black; /* Set text color to black for active or hovered link */
+    background-color: rgb(206, 206, 206); /* Set background color to black for active or hovered link */
+}
+
+.navbar {
+    background-color:  #f0f0f0;
+}
+
+.navbar-brand {
+    font-size: 35px; /* Set font size to 18 pixels */
+    font-family: 'Times New Roman', Times, serif; /* Set your desired font family */
+    font-weight: bold;
+    margin: 0 auto;   
+    color: black; 
+}
+
+#title {
+    font-size: 25px;
+    font-weight: bold;
+    color: blue;
+}
+
+.heading{
+    margin-top: 25px;
+    margin-left: 10px;
+}
+
+.heading h3{
+    
+    font-size: 2rem;
+    font-weight: bold;
+}

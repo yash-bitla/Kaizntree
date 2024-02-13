@@ -10,31 +10,18 @@ from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeErr
 from .utils import generate_token
 from django.core.mail import EmailMessage
 from django.conf import settings
-from .models import User
+from django.contrib.auth.models import User
+# from .models import User
 from validate_email import validate_email
-
-def send_activation_email(user, request):
-    current_site = get_current_site(request)
-    email_subject = 'Activate your Kaizntree account'
-    email_body = render_to_string('authentication/activate.html', {
-        'user': user,
-        'domain': current_site,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': generate_token.make_token(user)
-    })
-
-    email = EmailMessage(subject=email_subject, body=email_body,
-                         from_email=settings.EMAIL_FROM_USER,
-                         to=[user.email]
-                         )
-    
-    email.send()
-
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token
+from itemDashboard.views import display_items
 
 # Create your views here.
 def home(request):
     return render(request, "authentication/index.html")
 
+@csrf_exempt
 def signup(request):
     if request.method == "POST":
         context = {'has_error': False, 'data': request.POST}
@@ -89,9 +76,9 @@ def signup(request):
         user.save()
 
         if not context['has_error']:        
-            send_activation_email(user, request)
+            # send_activation_email(user, request)
             messages.add_message(request, messages.SUCCESS,
-                                    'We sent you an email to verify your account.')           
+                                    'Your account has been created successfully.')           
 
             return redirect('home')
 
@@ -104,20 +91,24 @@ def signin(request):
 
         user = authenticate(username = username, password = pass1)
 
-        if user and not user.is_email_verified:
-            messages.add_message(request, messages.ERROR,
-                                 'Email is not verified, please check your email inbox')
-            return render(request, 'authentication/index.html', status=401)
-
         if not user:
             messages.add_message(request, messages.ERROR,
                                  'Invalid credentials, try again')
             return render(request, 'authentication/index.html', status=401)
 
-        login(request, user)                
-   
+        login(request, user)
         fname = user.first_name
-        return render(request, 'authentication/index.html', {'fname': fname})    
+        
+        token, _ = Token.objects.get_or_create(user=user)
+
+        # Add tokens to the response
+        response_data = {
+            'username': user.username,
+            'token': token.key,
+            'fname': fname
+        }
+        # return render(request, 'authentication/index.html', response_data)     
+        return redirect(display_items, fname=fname)
 
     return render(request, "authentication/index.html")
 
@@ -125,24 +116,3 @@ def signout(request):
     logout(request)
     messages.success(request, "Logged out successfully")
     return redirect('home')
-
-
-def activate_user(request, uidb64, token):
-
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-
-        user = User.objects.get(pk=uid)
-
-    except Exception as e:
-        user = None
-
-    if user and generate_token.check_token(user, token):
-        user.is_email_verified = True
-        user.save()
-
-        messages.add_message(request, messages.SUCCESS,
-                             'Email verified, you can now login')
-        return redirect(reverse('home'))
-
-    return render(request, 'authentication/activate-failed.html', {"user": user})
