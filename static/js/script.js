@@ -1,9 +1,20 @@
+function showSuccessMessage(message) {   
+    $('.alert-success').removeClass('d-none').addClass('show');  
+} 
+
+function showErrorMessage(message) {    
+    $('.alert-warning').removeClass('d-none').addClass('show');
+}
+
 function create_category(){
+    
     const apiUrl = 'http://localhost:8000/api/v1/items/category/add/';
     const authToken = '514b1ac473ce9d7054cd8b032109efc3d19b74ee';
 
+    var categoryName = document.getElementById('categoryName').value;
+
     const requestData = {
-        name: '3',
+        name: categoryName,
     };
 
     fetch(apiUrl, {
@@ -16,55 +27,69 @@ function create_category(){
     })
     .then(response => {
         if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
         console.log('Success:', data);
-        // Handle the response data here
+        // Show success message
+        showSuccessMessage();  
     })
     .catch(error => {
         console.error('Error:', error);
-        // Handle errors here
+        // Show error message
+        showErrorMessage();
     });
 }
 
 function create_item(){
-    console.log("create_item");    
-    
+
+    var itemName = document.getElementById('itemName').value;
+    var category = document.getElementById('category').value;
+    var sku = document.getElementById('sku').value;
+    var tag = document.getElementById('tag').value;
+    var currentStock = document.getElementById('currentStock').value;
+    var availableStock = document.getElementById('availableStock').value;
+    var status = document.getElementById('status').value;
+
+    const apiUrl = 'http://localhost:8000/api/v1/items/add/';
     const authToken = '514b1ac473ce9d7054cd8b032109efc3d19b74ee';
-    const apiUrl = 'http://localhost:8000/api/v1/items/list/';
 
     // Define parameters
     const params = {
-        category: '1',       
+        name: itemName,
+        category: category,
+        sku: sku,
+        tag: tag,
+        currentStock: currentStock,
+        availableStock: availableStock,
+        status: status
     };
 
-    // Create a URL with parameters
-    const urlWithParams = new URL(apiUrl);
-    urlWithParams.search = new URLSearchParams(params).toString();
-
-    // Make a GET request using fetch with parameters
-    fetch(urlWithParams, {
-        method: 'GET',
+    fetch(apiUrl, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Token ${authToken}`,
+            'Authorization': `Token ${authToken}`
         },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Handle the data received from the API
-            console.log(data);
-        })
-        .catch(error => {
-            // Handle errors
-            console.error('Error fetching data:', error);
-        });
+        body: JSON.stringify(params),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            showErrorMessage()
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        showSuccessMessage();
+        // Handle success
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorMessage()
+        // Handle error
+    });
 }
